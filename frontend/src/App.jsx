@@ -14,10 +14,10 @@ import { Loader, Loader2 } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 
 function App() {
-  const { authUser, checkAuth, isCheckingAuth } = userAuthStore();
-  console.log("App authUser:", authUser);
+  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = userAuthStore();
 
   const { theme } = useThemeStore();
+  console.log({ onlineUsers });
 
   useEffect(() => {
     checkAuth();
@@ -64,7 +64,6 @@ function App() {
       <div>
         <Toaster />
       </div>
-      ;
     </>
   );
 }

@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
 import { login } from "./auth.controller.js";
 import cloudinary from "../lib/cloudinary.js";
+import { getReceiverSocketId, io } from "../lib/socket.js";
 
 export const getUserForSidebar = async (req, res) => {
   try {
@@ -46,9 +47,15 @@ export const sendMessage = async (req, res) => {
     let imageUrl = null;
 
     // Upload image to cloudinary
+
     if (image) {
-      const uploadResponse = await cloudinary.uploader.upload(image);
-      imageUrl = uploadResponse.secure_url;
+      try {
+        const uploadResponse = await cloudinary.uploader.upload(image);
+        imageUrl = uploadResponse.secure_url;
+      } catch (error) {
+        console.log("Cloudinary Error:", error);
+        throw error;
+      }
     }
 
     // Create new message
@@ -61,9 +68,14 @@ export const sendMessage = async (req, res) => {
 
     await newMessage.save();
 
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
+
     res.status(201).json(newMessage);
   } catch (error) {
-    console.log("Error in sendMessage controller:", error.message);
+    console.error(error);
 
     res.status(500).json({
       message: "Internal Server Error",
