@@ -18,7 +18,10 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://connectify-frontend-zknz.onrender.com",
+    origin: [
+      "http://localhost:5174",
+      "https://connectify-frontend-zknz.onrender.com",
+    ],
     credentials: true,
   }),
 );
