@@ -12,7 +12,7 @@ import {
 import { Link } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import AuthImagePattern from "../components/AuthImagePattern";
+import AuthImagePattern from "../Components/AuthImagePattern";
 import toast from "react-hot-toast";
 
 const SignUpPage = () => {
